@@ -7,6 +7,7 @@
 
 #include <cstdlib>
 #include <vector>
+#include <typeinfo>
 namespace CppLodash
 {
     template <typename T>
@@ -41,6 +42,30 @@ namespace CppLodash
          */
         static std::vector<T> compact(std::vector<T>& array)
         {
+            std::vector<T> rst;
+            if(array.size() == 0) return rst;
+            for(T item : array)
+            {
+                if(item)
+                {
+                    rst.push_back(item);
+                }
+            }
+            return rst;
+        }
+
+        static std::vector<std::string> compact(std::vector<std::string>& array)
+        {
+            std::vector<std::string> rst;
+            if(array.size() == 0) return rst;
+            for(auto& item : array)
+            {
+                if(item.size())
+                {
+                    rst.push_back(item);
+                }
+            }
+            return rst;
 
         }
     };

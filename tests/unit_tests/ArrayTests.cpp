@@ -3,6 +3,7 @@
 //
 #include "gtest/gtest.h"
 #include "Array.h"
+#include <typeinfo>
 using namespace std;
 using namespace CppLodash;
 TEST(LodashArrayTest, canChunkIntegerVector)
@@ -14,3 +15,10 @@ TEST(LodashArrayTest, canChunkIntegerVector)
     EXPECT_EQ(rst[0][1], 2);
 }
 
+TEST(LodashArrayTest, canCompactIntegerVector)
+{
+    vector<int> test = {1,0,2,3,4};
+    auto rst = Array<int>::compact(test);
+    EXPECT_EQ(rst.size(), 4u);
+    EXPECT_EQ(rst[1], 2);
+}
