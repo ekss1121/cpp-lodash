@@ -22,3 +22,12 @@ TEST(LodashArrayTest, canCompactIntegerVector)
     EXPECT_EQ(rst.size(), 4u);
     EXPECT_EQ(rst[1], 2);
 }
+
+TEST(LodashArrayTest, canConcatIntegers)
+{
+    vector<int> v1{1,2};
+    vector<int> v2{3,4};
+    vector<int> v3{5,6};
+    auto rst = Array<int>::concat(v1, v2, v3);
+    EXPECT_EQ(rst.size(), 6u);
+}

@@ -68,6 +68,31 @@ namespace CppLodash
             return rst;
 
         }
+        /**
+         *
+         * @tparam Ts
+         * @param args
+         * @return
+         */
+        static std::vector<T> concat()
+        { // break the recursion chain of variac template function;
+            return std::vector<T>();
+        }
+        template <typename ...Ts>
+        static std::vector<T> concat(std::vector<T> arg, Ts ...args) {
+            std::vector<T> rst;
+            auto size = sizeof...(args);
+            for(auto& n : arg)
+            {
+                rst.push_back(n);
+            }
+            auto next_array = concat(args...);
+            for(auto& i : next_array)
+            {
+                rst.push_back(i);
+            }
+            return rst;
+        }
     };
 }
 
