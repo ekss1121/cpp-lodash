@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <vector>
 #include <typeinfo>
+#include <unordered_set>
 namespace CppLodash
 {
     template <typename T>
@@ -79,7 +80,7 @@ namespace CppLodash
             return std::vector<T>();
         }
         template <typename ...Ts>
-        static std::vector<T> concat(std::vector<T> arg, Ts ...args) {
+        static std::vector<T> concat(std::vector<T>& arg, Ts ...args) {
             std::vector<T> rst;
             auto size = sizeof...(args);
             for(auto& n : arg)
@@ -93,6 +94,28 @@ namespace CppLodash
             }
             return rst;
         }
+        /**
+         *
+         * @param array The array to inspect
+         * @param values THe values to exclude
+         * @return return the new array of filtered values
+         */
+        static std::vector<T> difference(std::vector<T>& array, std::vector<T>& values)
+        {
+            std::unordered_set<T> _set;
+            _set.insert(values.begin(), values.end());
+            std::vector<T> rst;
+            for(unsigned int i=0; i<array.size(); i++)
+            {
+                if(_set.find(array[i]) == _set.end())
+                {
+                    rst.push_back(array[i]);
+                }
+            }
+
+            return rst;
+        }
+
     };
 }
 

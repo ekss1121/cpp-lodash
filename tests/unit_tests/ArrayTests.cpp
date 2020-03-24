@@ -31,3 +31,13 @@ TEST(LodashArrayTest, canConcatIntegers)
     auto rst = Array<int>::concat(v1, v2, v3);
     EXPECT_EQ(rst.size(), 6u);
 }
+
+TEST(LodashArrayTest, canDifferenceIntegers)
+{
+    vector<int> v1{1,2};
+    vector<int> filter{1,3};
+    auto rst = Array<int>::difference(v1, filter);
+    EXPECT_EQ(rst.size(), 1u);
+    EXPECT_EQ(rst[0], 2);
+
+}
