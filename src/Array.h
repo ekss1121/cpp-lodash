@@ -11,96 +11,69 @@
 #include <unordered_set>
 namespace CppLodash
 {
-    template <typename T>
-    class Array {
-    public:
-        /**
+template <typename T>
+class Array
+{
+public:
+    /**
          *
          * @param array input vector
          * @param size  size of each chunck
          * @return 2d vector with each chunk with specified size
          */
-        static std::vector<std::vector<T>> chunk(std::vector<T>& array, size_t size)
-        {
-            std::vector<std::vector<T>> rst;
-            if(array.size() == 0) return rst;
-            for(unsigned int i=0; i<array.size();)
-            {
-                std::vector<T> tmp;
-                for(unsigned int j=0; j+i<size; j++)
-                {
-                    tmp.push_back(array[i+j]);
-                }
-                i += size;
-                rst.push_back(tmp);
-            }
+    static std::vector<std::vector<T>> chunk(std::vector<T> &array, size_t size)
+    {
+        std::vector<std::vector<T>> rst;
+        if (array.size() == 0)
             return rst;
+        for (unsigned int i = 0; i < array.size();)
+        {
+            std::vector<T> tmp;
+            for (unsigned int j = 0; j + i < size; j++)
+            {
+                tmp.push_back(array[i + j]);
+            }
+            i += size;
+            rst.push_back(tmp);
         }
-        /**
+        return rst;
+    }
+    /**
          * Creates an array with all falsey values removed. The values false, null, 0, and "" are falsey.
          * @param array vector<T>
          * @return  vector<T>
          */
-        static std::vector<T> compact(std::vector<T>& array)
+    static std::vector<T> compact(std::vector<T> &array)
+    {
+        std::vector<T> rst;
+        if (array.size() == 0)
+            return rst;
+        for (T item : array)
         {
-            std::vector<T> rst;
-            if(array.size() == 0) return rst;
-            for(T item : array)
+            if (item)
             {
-                if(item)
-                {
-                    rst.push_back(item);
-                }
+                rst.push_back(item);
             }
-            return rst;
         }
+        return rst;
+    }
 
-        static std::vector<std::string> compact(std::vector<std::string>& array)
+    static std::vector<std::string> compact(std::vector<std::string> &array)
+    {
+        std::vector<std::string> rst;
+        if (array.size() == 0)
+            return rst;
+        for (auto &item : array)
         {
-            std::vector<std::string> rst;
-            if(array.size() == 0) return rst;
-            for(auto& item : array)
+            if (item.size())
             {
-                if(item.size())
-                {
-                    rst.push_back(item);
-                }
+                rst.push_back(item);
             }
-            return rst;
+        }
+        return rst;
+    }
 
-        }
-        /**
-         *
-         * @tparam Ts
-         * @param args
-         * @return
-         */
-        static std::vector<T> concat()
-        { // break the recursion chain of variac template function;
-            return std::vector<T>();
-        }
-        template <typename ...Ts>
-        static std::vector<T> concat(std::vector<T>& arg, Ts ...args) {
-            std::vector<T> rst;
-            auto size = sizeof...(args);
-            for(auto& n : arg)
-            {
-                rst.push_back(n);
-            }
-            auto next_array = concat(args...);
-            for(auto& i : next_array)
-            {
-                rst.push_back(i);
-            }
-            return rst;
-        }
-        /**
-         *
-         * @param array The array to inspect
-         * @param values THe values to exclude
-         * @return return the new array of filtered values
-         */
-        static std::vector<T> difference(std::vector<T>& array, std::vector<T>& values)
+       static std::vector<T> difference(std::vector<T>& array, std::vector<T>& values)
         {
             std::unordered_set<T> _set;
             _set.insert(values.begin(), values.end());
@@ -116,9 +89,23 @@ namespace CppLodash
             return rst;
         }
 
-    };
-}
+        /**
+         * @param array The array to inspect
+         * @param valuse THe value s to exclude
+         * @param [iteratee](function) The iteratee invoked per element
+         * 
+         */
+        static std::vector<T> differenceBy(std::vector<T>& array, std::vector<T>& values, std::function<T>& lambda) {
+            std::vector<T> f_values;
+            for(T& item : values) {
+                f_values.push_back(lambda(item));
+            }
 
+            return difference(array, f_values);
+        }
+
+    };
+} //namespace CppLodash
 
 
 #endif //CPPLODASH_ARRAY_H
